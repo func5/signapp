@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,6 +57,7 @@
 <body>
 <div class="login-container">
     <h2>로그인</h2>
+    
     <form action="/login" method="post">
         <label for="empId">ID</label>
         <input type="text" id="empId" name="empId" value="${param.empId }" required>

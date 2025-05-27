@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +11,11 @@
 
 <div class="container mt-5" style="max-width: 500px;">
     <h3 class="mb-4 text-center">회원가입</h3>
+    
+    <%-- 메세지 출력 --%>
+    <c:if test="${msg != null}">
+        <div class="alert alert-danger text-center">${msg}</div>
+    </c:if>
 
     <form action="/join" method="post">
         <div class="mb-3">

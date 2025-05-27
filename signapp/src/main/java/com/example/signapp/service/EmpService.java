@@ -24,4 +24,9 @@ public class EmpService {
 		log.debug("회원가입 요청 : {}", emp);
 			return empMapper.insertEmployee(emp);
 	}
+	
+	// 중복검사
+	public boolean isDuplicateId(String empId) {
+		return empMapper.selectEmployeeById(empId) != null;
+	}
 }

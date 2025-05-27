@@ -26,12 +26,7 @@ public class DocController {
     public String docList(HttpSession session, Model model) {
     	// 로그인 사용자 정보 세션에서 꺼내고
         Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
-
-        // 로그인 안했으면 로그인 페이지로
-        if (loginEmp == null) {
-            return "redirect:/login";
-        }
-        
+       
         // 로그인한 사용자의 레벨과 아이디 
         int empLevel = loginEmp.getEmpLevel();
         String empId = loginEmp.getEmpId();
@@ -55,9 +50,6 @@ public class DocController {
     // 문서 등록 
     @GetMapping("/insertDoc")
     public String insertDoc(HttpSession session) {
-    	if(session.getAttribute("loginEmployee") == null) {
-    		return "redirect:/login";
-    	}
     	return "insertDoc";
     }
     
@@ -67,7 +59,7 @@ public class DocController {
                             HttpSession session) throws Exception {
         Emp loginEmployee = (Emp) session.getAttribute("loginEmployee");
 
-        if (loginEmployee == null || loginEmployee.getEmpLevel() != 1) {
+        if (loginEmployee.getEmpLevel() != 1) {
             return "redirect:/login"; // 레벨 1만 등록 가능
         }
 
