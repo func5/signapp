@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.signapp.dto.Document;
 import com.example.signapp.dto.Emp;
+import com.example.signapp.dto.Sign;
 import com.example.signapp.service.DocService;
+import com.example.signapp.service.SignService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DocController {
 	@Autowired DocService docService;
+	@Autowired SignService signService; // 윤성권 추가
 	
     // 리스트
     @GetMapping("/docList")
@@ -86,6 +89,12 @@ public class DocController {
             return "redirect:/docList";
         }
 
+        Sign signLv2 = signService.getSign(docNo,2);	// 윤성권 추가
+        Sign signLv3 = signService.getSign(docNo,3);	// 윤성권 추가
+        
+        model.addAttribute("signLv2",signLv2);
+        model.addAttribute("signLv3",signLv3);
+        
         model.addAttribute("doc", doc);
         return "docDetail"; // ← 요기 이름!
     }

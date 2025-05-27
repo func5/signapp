@@ -9,4 +9,8 @@ public class Sign {
 	private String empId;
 	private String createDate;
 	private String signName;
+	
+	// 조인
+	private String empName;
+	private int empLevel;
 }

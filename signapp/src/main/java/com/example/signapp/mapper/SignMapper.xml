@@ -4,7 +4,19 @@
 
 
 	<!-- //////// SELECT //////// -->
-	
+	<select id="getSign" parameterType="int" resultType="com.example.signapp.dto.Sign">
+		SELECT
+			s.sign_no AS signNo,
+			s.doc_no AS docNo,
+			s.emp_id AS empId,
+			s.createdate AS createDate,
+			s.sign_name AS signName,
+			e.emp_level AS empLevel,
+			e.emp_name AS empName
+		FROM sign s
+		INNER JOIN emp e ON s.emp_id = e.emp_id
+		WHERE s.doc_no = #{docNo} AND e.emp_level = #{empLevel};
+	</select>
 	
 	<!-- //////// UPDATE //////// -->
 	
@@ -13,5 +25,17 @@
 	
 	
 	<!-- //////// INSERT //////// -->
-
+	
+		<!-- 
+			DB에 사인 정보 저장
+		 -->
+	<insert id="insertSign" parameterType="com.example.signapp.dto.Sign">
+		INSERT INTO sign(
+			doc_no, emp_id, sign_name
+		) VALUES(
+			#{docNo}, #{empId}, #{signName}
+		)
+	
+	</insert>
+	
 </mapper>
