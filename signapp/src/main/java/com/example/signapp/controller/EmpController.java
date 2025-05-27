@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.signapp.dto.Emp;
 import com.example.signapp.service.EmpService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,10 +21,15 @@ public class EmpController {
 	
 	// 로그인 + 필터 메세지
 	@GetMapping({"/", "/login"})
-	public String login(@RequestParam(required = false) String msg, Model model) {
-	    if ("needLogin".equals(msg)) {
+	public String login(@RequestParam(required = false) String msg,
+	                    HttpServletRequest request,
+	                    Model model) {
+
+	    // 오직 GET 요청일 때만 msg 파라미터 처리
+	    if ("needLogin".equals(msg) && "GET".equalsIgnoreCase(request.getMethod())) {
 	        model.addAttribute("msg", "로그인이 필요합니다.");
 	    }
+
 	    return "login";
 	}
 	

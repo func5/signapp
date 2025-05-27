@@ -78,5 +78,14 @@
 </div>
     </form>
 </div>
+
+<script>
+// 로그인 msg가 떠서 
+  const url = new URL(window.location.href);
+  if (url.searchParams.has("msg")) {
+    url.searchParams.delete("msg");
+    window.history.replaceState({}, document.title, url.pathname); // msg 지운 주소로 덮어쓰기
+  }
+</script>
 </body>
 </html>
