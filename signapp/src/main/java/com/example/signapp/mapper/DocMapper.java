@@ -20,4 +20,14 @@ public interface DocMapper {
     int insertDocument(Document doc);
     
     Document selectDocumentByNo(int docNo);
+    
+    // 본인 문서 수정
+ 	int updateDocument(Document doc);
+
+ 	// 본인 문서 삭제
+ 	int deleteDocument(int docNo);
+ 	
+ 	// 결제 상태 업데이트(반려까지만)
+	int updateSignStatus(int docNo, String signStatus);
+
 }

@@ -33,4 +33,15 @@ public class DocService {
 	public Document getDocument(int docNo) {
 		return docMapper.selectDocumentByNo(docNo);
 	}
+	
+	public int updateDocument(Document doc) {
+		return docMapper.updateDocument(doc);
+	}
+	
+	public int deleteDocument(int docNo) {
+		return docMapper.deleteDocument(docNo);
+	}
+	public int updateSignStatus(int docNo, String signStatus) {
+		return docMapper.updateSignStatus(docNo, signStatus);
+	}
 }

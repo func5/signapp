@@ -52,13 +52,25 @@
 	</select>
 
 	<!-- //////// UPDATE //////// -->
+	<update id="updateDocument" parameterType="com.example.signapp.dto.Document">
+		UPDATE document
+		SET doc_title = #{docTitle}, doc_content = #{docContent}
+		WHERE doc_no = #{docNo} AND emp_id = #{empId}
+	</update>
 	
+	<update id="updateSignStatus">
+		UPDATE document
+		SET status = #{signStatus}
+		WHERE doc_no = #{docNo}
+	</update>
 	
 	<!-- //////// DELETE //////// -->
-	
+	<delete id="deleteDocument" parameterType="int">
+		DELETE FROM document
+		WHERE doc_no = #{docNo}
+	</delete>
 	
 	<!-- //////// INSERT //////// -->
-	
 	<insert id="insertDocument"
 	        parameterType="com.example.signapp.dto.Document"
 	        useGeneratedKeys="true"

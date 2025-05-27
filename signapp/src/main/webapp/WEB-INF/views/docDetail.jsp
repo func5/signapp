@@ -83,14 +83,14 @@
 
 <%-- 삭제/수정 버튼: 작성자 본인만 --%>
 <c:if test="${myEmpId == doc.empId}">
-    <form action="/deleteDoc" method="post" style="display:inline;">
+    <form action="/deleteDoc" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
         <input type="hidden" name="docNo" value="${doc.docNo}" />
         <button type="submit" class="btn">🗑️ 삭제</button>
     </form>
 
     <form action="/updateDoc" method="get" style="display:inline;">
         <input type="hidden" name="docNo" value="${doc.docNo}" />
-        <button type="submit" class="btn">✏️ 수정하기</button>
+        <button type="submit" class="btn">✏️ 수정</button>
     </form>
 </c:if>
 

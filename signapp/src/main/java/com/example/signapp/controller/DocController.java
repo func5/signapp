@@ -99,4 +99,53 @@ public class DocController {
         model.addAttribute("doc", doc);
         return "docDetail"; // ← 요기 이름!
     }
+    
+    // 문서 수정하기
+    @GetMapping("/updateDoc")
+    public String updateDoc(@RequestParam int docNo, HttpSession session, Model model) {
+    	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
+    	
+    	Document doc = docService.getDocument(docNo);
+    	// 작성자 본인 문서가 아니면 접근 제한
+        if (!loginEmp.getEmpId().equals(doc.getEmpId())) {
+            return "redirect:/docList";
+        }
+        
+        model.addAttribute("doc", doc);
+    	return "updateDoc";
+    }
+    
+    @PostMapping("/updateDoc")
+    public String updateDoc(Document doc, HttpSession session) {
+    	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
+    	// 로그인한 사용자의 ID 주입
+    	doc.setEmpId(loginEmp.getEmpId());
+    	docService.updateDocument(doc);
+    	
+    	// 문서 수정 후 해당 문서 상세 페이지로 이동
+    	return "redirect:/docDetail?docNo=" + doc.getDocNo();
+    }
+    
+    // 문서 삭제
+    @PostMapping("/deleteDoc")
+    public String deleteDoc(@RequestParam int docNo, HttpSession session) {
+    	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
+    	
+    	Document doc = docService.getDocument(docNo);
+    	// 작성자 본인 문서가 아니면 접근 제한
+        if (!loginEmp.getEmpId().equals(doc.getEmpId())) {
+            return "redirect:/docList";
+        }
+        
+        docService.deleteDocument(docNo);
+        return "redirect:/docList";
+    }
+    
+    // 결제 상태 업데이트(반려까지만)
+    @PostMapping("/signDoc")
+    public String signDoc(@RequestParam int docNo,
+    					  @RequestParam String signStatus) {
+    	docService.updateSignStatus(docNo, signStatus);
+    	return "redirect:/docList";
+    }
 }
