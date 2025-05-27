@@ -8,21 +8,23 @@
         [1] 사원: 본인이 작성한 문서만 조회
     -->
     <select id="selectMyDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
-	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
-	    FROM document
-	    WHERE emp_id = (
-	        SELECT emp_id FROM emp WHERE emp_id = #{empId}
-	    )
-	    ORDER BY createdate DESC
+	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
+		FROM document INNER JOIN emp
+		ON document.emp_id = emp.emp_id
+		WHERE emp.emp_id = (
+		  SELECT emp_id FROM emp WHERE emp_id = #{empId}
+		)
+		ORDER BY createdate DESC
 	</select>
     
     <!--
         [2] 팀장: 같은 부서(emp.dept) 사람들의 문서 조회
     -->
     <select id="selectTeamDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
-	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
-	    FROM document
-	    WHERE emp_id IN (
+	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
+		FROM document INNER JOIN emp
+		ON document.emp_id = emp.emp_id
+	    WHERE emp.emp_id IN (
 	        SELECT emp_id
 	        FROM emp
 	        WHERE dept = (
@@ -36,14 +38,16 @@
         [3] 관리자: 전체 문서 다 조회
     -->
     <select id="selectAllDocuments" resultType="com.example.signapp.dto.Document">
-	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
-	    FROM document
+	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
+		FROM document INNER JOIN emp
+		ON document.emp_id = emp.emp_id
 	    ORDER BY createdate DESC
 	</select>
 	
 	<select id="selectDocumentByNo" parameterType="int" resultType="com.example.signapp.dto.Document">
-	    SELECT doc_no docNo, emp_id empId, doc_title docTitle, doc_content docContent, status, createdate
-	    FROM document
+	    SELECT doc_no docNo, emp.emp_id empId, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
+		FROM document INNER JOIN emp
+		ON document.emp_id = emp.emp_id
 	    WHERE doc_no = #{docNo}
 	</select>
 

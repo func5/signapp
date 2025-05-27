@@ -46,6 +46,7 @@ public class DocController {
             docList = docService.getAllDocuments();
         }
 
+        //log.info(docList.toString());
         model.addAttribute("docList", docList);
         return "docList";
     }

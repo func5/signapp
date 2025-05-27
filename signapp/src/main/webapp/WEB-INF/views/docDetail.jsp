@@ -65,6 +65,7 @@
 <p><strong>문서번호:</strong> ${doc.docNo}</p>
 <p><strong>제목:</strong> ${doc.docTitle}</p>
 <p><strong>작성일:</strong> ${doc.createDate}</p>
+<p><strong>작성자:</strong> ${doc.empName}</p>
 <p><strong>내용:</strong> ${doc.docContent}</p>
 <p><strong>결재 상태:</strong> 
     <c:choose>

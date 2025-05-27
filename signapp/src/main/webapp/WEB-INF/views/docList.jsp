@@ -21,6 +21,7 @@
             <tr>
                 <th>문서번호</th>
                 <th>제목</th>
+                <th>작성자</th>
                 <th>작성일</th>
                 <th>결제 상태</th>
             </tr>
@@ -30,6 +31,7 @@
                 <tr>
                     <td>${doc.docNo}</td>
                     <td><a href="/docDetail?docNo=${doc.docNo}">${doc.docTitle}</a></td>
+                    <td>${doc.empName}</td>
                     <td>${doc.createDate}</td>
                     <td>
         			  <c:choose>

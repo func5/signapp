@@ -10,4 +10,5 @@ public class Document {
 	private String docContent;
 	private String createDate;
 	private String status;		// 대기, 반려, 결제
+	private String empName;
 }
