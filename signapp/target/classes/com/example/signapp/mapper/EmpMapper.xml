@@ -4,7 +4,21 @@
 
 
 	<!-- //////// SELECT //////// -->
-	
+	<!--
+        사원 단일 조회 (로그인 시 사용)
+        - emp_id 기준으로 1명 조회
+        - resultType은 Employee DTO로 매핑
+    -->
+    <select id="selectEmployeeById" parameterType="string" resultType="com.example.signapp.dto.Emp">
+	    SELECT 
+	    	emp_no AS empNo, 
+	        emp_id AS empId,
+	        emp_name AS empName,
+	        emp_pw AS empPw,
+	        emp_level AS empLevel
+	    FROM emp
+	    WHERE emp_id = #{empId}
+	</select>
 	
 	<!-- //////// UPDATE //////// -->
 	
@@ -13,5 +27,14 @@
 	
 	
 	<!-- //////// INSERT //////// -->
-
+	    <!--
+        사원 등록 (회원가입)
+        - emp_id, emp_pw, emp_name, emp_level을 입력받아 employee 테이블에 등록
+        - emp_no는 AUTO_INCREMENT
+    -->
+    <insert id="insertEmployee" parameterType="com.example.signapp.dto.Emp"
+        useGeneratedKeys="true" keyProperty="empNo">
+	    INSERT INTO emp (emp_id, emp_name, emp_pw, emp_level, dept)
+		VALUES (#{empId}, #{empName}, #{empPw}, #{empLevel}, #{dept})
+	</insert>
 </mapper>

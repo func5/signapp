@@ -2,10 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.signapp.mapper.DocMapper">
 
-
+	
 	<!-- //////// SELECT //////// -->
+	<!--
+        [1] 사원: 본인이 작성한 문서만 조회
+    -->
+    <select id="selectMyDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
+	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
+	    FROM document
+	    WHERE emp_id = (
+	        SELECT emp_id FROM emp WHERE emp_id = #{empId}
+	    )
+	    ORDER BY createdate DESC
+	</select>
+    
+    <!--
+        [2] 팀장: 같은 부서(emp.dept) 사람들의 문서 조회
+    -->
+    <select id="selectTeamDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
+	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
+	    FROM document
+	    WHERE emp_id IN (
+	        SELECT emp_id
+	        FROM emp
+	        WHERE dept = (
+	            SELECT dept FROM emp WHERE emp_id = #{empId}
+	        )
+	    )
+	    ORDER BY createdate DESC
+	</select>
 	
+	<!--
+        [3] 관리자: 전체 문서 다 조회
+    -->
+    <select id="selectAllDocuments" resultType="com.example.signapp.dto.Document">
+	    SELECT doc_no docNo, doc_title docTitle, doc_content docContent, status, createdate
+	    FROM document
+	    ORDER BY createdate DESC
+	</select>
 	
+	<select id="selectDocumentByNo" parameterType="int" resultType="com.example.signapp.dto.Document">
+	    SELECT doc_no docNo, emp_id empId, doc_title docTitle, doc_content docContent, status, createdate
+	    FROM document
+	    WHERE doc_no = #{docNo}
+	</select>
+
 	<!-- //////// UPDATE //////// -->
 	
 	
@@ -13,5 +54,12 @@
 	
 	
 	<!-- //////// INSERT //////// -->
-
+	
+	<insert id="insertDocument"
+	        parameterType="com.example.signapp.dto.Document"
+	        useGeneratedKeys="true"
+	        keyProperty="docNo">
+	    INSERT INTO document (emp_id, doc_title, doc_content, status, createdate)
+	    VALUES (#{empId}, #{docTitle}, #{docContent}, #{status}, NOW())
+	</insert>
 </mapper>

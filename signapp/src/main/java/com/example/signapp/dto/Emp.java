@@ -10,4 +10,5 @@ public class Emp {
 	private String empName;
 	private String empPw;
 	private int empLevel;
+	private String dept;
 }
