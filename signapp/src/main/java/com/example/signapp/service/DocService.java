@@ -47,17 +47,21 @@ public class DocService {
 	public int deleteDocument(int docNo) {
 		return docMapper.deleteDocument(docNo);
 	}
+	
 	public int updateSignStatus(int docNo, String signStatus) {
-		// 반려면 그 문서에 있는 사인들도 모두 지워줘야함...
 		int row =  docMapper.updateSignStatus(docNo, signStatus);
-		if (row > 0) {
+		
+		// 반려일 때만 사인 삭제
+		if (row > 0 && "REJECTED".equals(signStatus)) {
 			signMapper.deleteSign(docNo);
 		}
 		return row;
 	}
+	
 	public List<Document> selectDocumentList(Page page) {
 		return docMapper.selectDocumentList(page);
 	}
+	
 	public int totalCount(Page page) {
 		return docMapper.totalCount(page);
 	}

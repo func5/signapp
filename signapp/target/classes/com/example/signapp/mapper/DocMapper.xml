@@ -104,7 +104,7 @@
 	<!-- //////// UPDATE //////// -->
 	<update id="updateDocument" parameterType="com.example.signapp.dto.Document">
 		UPDATE document
-		SET doc_title = #{docTitle}, doc_content = #{docContent}
+		SET doc_title = #{docTitle}, doc_content = #{docContent}, status = #{status}
 		WHERE doc_no = #{docNo} AND emp_id = #{empId}
 	</update>
 	

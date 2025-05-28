@@ -11,6 +11,7 @@
 
 	<form action="/updateDoc" method="post" enctype="multipart/form-data">
 		<input type="hidden" name="docNo" value="${doc.docNo}">
+		<input type="hidden" name="signStatus" value="${doc.status}">
 	    <label>제목: <input type="text" name="docTitle" value="${doc.docTitle}" required></label><br><br>
 	    <label>내용: <br>
 	        <textarea name="docContent" rows="10" cols="60" required>${doc.docContent}</textarea>

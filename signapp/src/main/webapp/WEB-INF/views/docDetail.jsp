@@ -59,6 +59,12 @@
 </head>
 <body>
 
+<c:if test="${not empty alertMsg}">
+	<script>
+		alert("${alertMsg}");
+	</script>
+</c:if>
+
 <h1>📄 문서 상세</h1>
 <hr>
 

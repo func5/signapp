@@ -121,10 +121,38 @@ public class DocController {
     	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
     	
     	Document doc = docService.getDocument(docNo);
+    	
     	// 작성자 본인 문서가 아니면 접근 제한
         if (!loginEmp.getEmpId().equals(doc.getEmpId())) {
             return "redirect:/docList";
         }
+        
+        // 승인된 문서는 수정 불가
+        if("APPROVED".equals(doc.getStatus())) {
+			model.addAttribute("doc", doc);
+			model.addAttribute("alertMsg", "승인된 문서는 수정할 수 없습니다.");
+			
+			Sign signLv2 = signService.getSign(docNo, 2);
+			Sign signLv3 = signService.getSign(docNo, 3);
+			model.addAttribute("signLv2", signLv2);
+			model.addAttribute("signLv3", signLv3);
+			
+			return "docDetail";
+		}
+        
+		// 대기 상태이지만 결재자가 이미 사인한 경우 수정 제한
+		if("WAIT".equals(doc.getStatus())) {
+			Sign signLv2 = signService.getSign(docNo, 2);
+			Sign signLv3 = signService.getSign(docNo, 3);
+
+			if(signLv2 != null || signLv3 != null) {
+				model.addAttribute("doc", doc);
+				model.addAttribute("alertMsg", "이미 결재자가 있어 수정할 수 없습니다.");
+				model.addAttribute("signLv2", signLv2);
+				model.addAttribute("signLv3", signLv3);
+				return "docDetail";
+			}
+		}
         
         model.addAttribute("doc", doc);
     	return "updateDoc";
@@ -135,6 +163,18 @@ public class DocController {
     	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
     	// 로그인한 사용자의 ID 주입
     	doc.setEmpId(loginEmp.getEmpId());
+    	
+    	// 기존 문서 정보 조회 (상태 확인용)
+    	Document originalDoc = docService.getDocument(doc.getDocNo());
+    	
+		// 반려 상태면 상태를 다시 대기로 변경
+		if("REJECTED".equals(originalDoc.getStatus())) {
+			doc.setStatus("WAIT");
+		} else {
+			// 승인 전 상태 그대로 유지
+			doc.setStatus(originalDoc.getStatus());
+		}
+    	
     	docService.updateDocument(doc);
     	
     	// 문서 수정 후 해당 문서 상세 페이지로 이동
@@ -143,7 +183,7 @@ public class DocController {
     
     // 문서 삭제
     @PostMapping("/deleteDoc")
-    public String deleteDoc(@RequestParam int docNo, HttpSession session) {
+    public String deleteDoc(@RequestParam int docNo, HttpSession session, Model model) {
     	Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
     	
     	Document doc = docService.getDocument(docNo);
@@ -152,11 +192,42 @@ public class DocController {
             return "redirect:/docList";
         }
         
+        // 결재 대기중인 상태의 문서만 삭제 가능
+		if(!"WAIT".equals(doc.getStatus())) {
+			model.addAttribute("doc", doc);
+			model.addAttribute("alertMsg", "승인 및 반려된 문서는 삭제할 수 없습니다.");
+			
+			// 사인 정보 다시 조회
+			Sign signLv2 = signService.getSign(docNo, 2);
+			Sign signLv3 = signService.getSign(docNo, 3);
+			model.addAttribute("signLv2", signLv2);
+			model.addAttribute("signLv3", signLv3);
+	        
+			return "docDetail";
+		}
+		
+		try {
+			docService.deleteDocument(docNo);
+		} catch (Exception e) {
+			// 결재자 서명 존재 시 삭제 불가(FK 제약 조건 위반)
+			model.addAttribute("doc", doc);
+			model.addAttribute("alertMsg", "결재자가 있을 시 삭제할 수 없습니다.");
+			
+			// 사인 정보 다시 조회
+			Sign signLv2 = signService.getSign(docNo, 2);
+			Sign signLv3 = signService.getSign(docNo, 3);
+			model.addAttribute("signLv2", signLv2);
+			model.addAttribute("signLv3", signLv3);
+			
+			return "docDetail";
+		}
+		
+        
         docService.deleteDocument(docNo);
         return "redirect:/docList";
     }
     
-    // 결제 상태 업데이트(반려까지만)
+    // 결제 상태 업데이트
     @PostMapping("/signDoc")
     public String signDoc(@RequestParam int docNo,
     					  @RequestParam String signStatus) {
