@@ -121,7 +121,7 @@
 
         <div class="doc-line">
             <label for="writer">작성자</label>
-            <input type="text" name="writer" id="writer" required>
+            <input type="text" name="writer" id="writer" value="${loginEmployee.empName}" required readonly="readonly">
         </div>
 
         <div class="doc-content">

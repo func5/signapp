@@ -252,9 +252,9 @@
 		  <div class="user-detail">
 		    <span class="icon">
 			  <c:choose>
-			    <c:when test="${loginEmployee.empLevel == 1}">🧑‍💼</c:when>
-			    <c:when test="${loginEmployee.empLevel == 2}">👨‍💼</c:when>
-			    <c:when test="${loginEmployee.empLevel == 3}">👑</c:when>
+			    <c:when test="${loginEmployee.empLevel == 1}">🧑‍💻</c:when>
+			    <c:when test="${loginEmployee.empLevel == 2}">🧑‍💼</c:when>
+			    <c:when test="${loginEmployee.empLevel == 3}">🧑‍⚖️</c:when>
 			  </c:choose>
 			</span>
 			${loginEmployee.empName}

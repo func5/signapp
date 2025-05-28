@@ -329,11 +329,11 @@
         <!-- LV2 -->
         <div class="sign-box">
             <label>서명</label>
-            <c:if test="${not empty signLv2}">
+            <c:if test="${not empty signLv2 and doc.status ne 'REJECTED'}">
                 <p>${signLv2.empName}</p>
                 <img src="data:image/png;base64,${signLv2.signName}" />
             </c:if>
-            <c:if test="${empty signLv2 and myLevel == 2}">
+            <c:if test="${empty signLv2 and myLevel == 2 and doc.status ne 'REJECTED'}">
                 <form action="/signDoc" method="post">
                     <canvas style="border: 1px solid #000000; width:180px; height:60px;"></canvas><br>
                     <button type="button" id="btnClear">사인 지우기</button>
@@ -357,7 +357,7 @@
                 <p>${signLv3.empName}</p>
                 <img src="data:image/png;base64,${signLv3.signName}" />
             </c:if>
-            <c:if test="${empty signLv3 and signLv2 != null and myLevel == 3}">
+            <c:if test="${empty signLv3 and signLv2 != null and myLevel == 3 and doc.status ne 'REJECTED'}">
                 <form action="/signDoc" method="post">
                     <canvas style="border: 1px solid #000000; width:180px; height:60px;"></canvas><br>
                     <button type="button" id="btnClear">사인 지우기</button>
