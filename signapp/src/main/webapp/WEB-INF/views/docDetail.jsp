@@ -106,8 +106,8 @@
 			<!-- lv2 -->
 			<td>
 				<div>
-					<!-- 사인이 있을 때 (null이 아니고, 비어있지 않을 때) -->
-					<c:if test="${not empty signLv2}">
+					<!-- 사인이 있을 때 (null이 아니고, 비어있지 않을 때) and 반려면 이미 사인을 했더라도 사인이 안뜨게 -->
+					<c:if test="${not empty signLv2  and doc.status ne 'REJECTED'}">
 					    <p>결재자: ${signLv2.empName}</p>
 					    <p><img src="data:image/png;base64,${signLv2.signName}"/></p>
 					</c:if>
@@ -115,8 +115,8 @@
 					<%-- 결재 버튼: 팀장/관리자만 --%>
 					<c:if test="${myLevel == 2}">
 						
-						<!-- 사인이 없을 때 (null이거나 비어있을 때) -->
-						<c:if test="${empty signLv2}">
+						<!-- 사인이 없을 때 (null이거나 비어있을 때) and 반려면 사인 못하게-->
+						<c:if test="${empty signLv2 and doc.status ne 'REJECTED'}">
 						    <form action="/signDoc" method="post" name="signForm">
 						        <!-- id : 사인 레벨이 되는 로그인 사용자 id -->
 						        <canvas style="border: 1px solid #000000;"></canvas>
@@ -146,7 +146,7 @@
 				    <p><img src="data:image/png;base64,${signLv3.signName}"/></p>
 				</c:if>
 				
-				<c:if test="${myLevel == 3 and signLv2 != null}">
+				<c:if test="${myLevel == 3 and signLv2 != null and doc.status ne 'REJECTED'}">
 				    	<!-- 사인이 없을 때 (null이거나 비어있을 때) -->
 					<c:if test="${empty signLv3}">
 					    <form action="/signDoc" method="post" name="signForm">

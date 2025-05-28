@@ -4,18 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import com.example.signapp.SignappApplication;
 import com.example.signapp.dto.Document;
 import com.example.signapp.dto.Page;
 import com.example.signapp.mapper.DocMapper;
+import com.example.signapp.mapper.SignMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Transactional
 @Service
 @Slf4j
 public class DocService {
+
 	@Autowired DocMapper docMapper;
-	
+	@Autowired SignMapper signMapper;
+
 	public List<Document> getMyDocuments(Page page) {
 		return docMapper.selectMyDocuments(page);
 	}
@@ -43,7 +48,12 @@ public class DocService {
 		return docMapper.deleteDocument(docNo);
 	}
 	public int updateSignStatus(int docNo, String signStatus) {
-		return docMapper.updateSignStatus(docNo, signStatus);
+		// 반려면 그 문서에 있는 사인들도 모두 지워줘야함...
+		int row =  docMapper.updateSignStatus(docNo, signStatus);
+		if (row > 0) {
+			signMapper.deleteSign(docNo);
+		}
+		return row;
 	}
 	public List<Document> selectDocumentList(Page page) {
 		return docMapper.selectDocumentList(page);

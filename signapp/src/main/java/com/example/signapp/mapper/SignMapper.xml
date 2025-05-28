@@ -23,6 +23,10 @@
 	
 	<!-- //////// DELETE //////// -->
 	
+	<delete id="deleteSign" parameterType="int">
+		DELETE FROM sign
+		WHERE doc_no = #{docNo}
+	</delete>
 	
 	<!-- //////// INSERT //////// -->
 	

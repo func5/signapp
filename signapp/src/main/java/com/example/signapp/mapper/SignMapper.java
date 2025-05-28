@@ -9,4 +9,6 @@ public interface SignMapper {
 	int insertSign(Sign sign);
 	
 	Sign getSign(int docNo, int empLevel);
+	
+	int deleteSign(int docNo);
 }
