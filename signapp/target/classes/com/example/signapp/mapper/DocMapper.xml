@@ -54,9 +54,11 @@
         [3] 관리자: 전체 문서 다 조회
     -->
     <select id="selectAllDocuments" parameterType="com.example.signapp.dto.Page" resultType="com.example.signapp.dto.Document">
-	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
+		SELECT DISTINCT document.doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, document.createdate
 		FROM document INNER JOIN emp
-		ON document.emp_id = emp.emp_id
+			ON document.emp_id = emp.emp_id
+						  INNER JOIN sign
+			ON document.doc_no = sign.doc_no
 		<if test="searchType == 'title' and searchWord != null and searchWord != ''">
 			AND doc_title LIKE CONCAT('%', #{searchWord}, '%')
 		</if>
