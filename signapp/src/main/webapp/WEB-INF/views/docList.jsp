@@ -45,5 +45,20 @@
             </c:forEach>
         </tbody>
     </table>
+    
+    <!-- 페이징 -->
+	<c:forEach var="i" begin="1" end="${page.lastPage}">
+	    <a href="?page=${i}&searchWord=${page.searchWord}">${i}</a>
+	</c:forEach>
+	
+	<!-- 검색 -->
+	<form method="get" action="/docList">
+		<select name="searchType">
+			<option value="title" ${param.searchType == 'title' ? 'selected' : ''}>제목</option>
+			<option value="name" ${param.searchType == 'name' ? 'selected' : ''}>작성자</option>
+		</select>
+			<input type="text" name="searchWord" value="${param.searchWord}" />
+			<button type="submit">검색</button>
+	</form>
 </body>
 </html>

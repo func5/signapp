@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.signapp.dto.Document;
+import com.example.signapp.dto.Page;
 import com.example.signapp.mapper.DocMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +16,15 @@ import lombok.extern.slf4j.Slf4j;
 public class DocService {
 	@Autowired DocMapper docMapper;
 	
-	public List<Document> getMyDocuments(String empId) {
-		return docMapper.selectMyDocuments(empId);
+	public List<Document> getMyDocuments(Page page) {
+		return docMapper.selectMyDocuments(page);
 	}
-	public List<Document> getTeamDocuments(String empId) { // 또는 부서 ID
-		return docMapper.selectTeamDocuments(empId);
+	public List<Document> getTeamDocuments(Page page) { // 또는 부서 ID
+		return docMapper.selectTeamDocuments(page);
 	}
 	
-	public List<Document> getAllDocuments() {
-		return docMapper.selectAllDocuments();
+	public List<Document> getAllDocuments(Page page) {
+		return docMapper.selectAllDocuments(page);
 	}
 	
 	public int insertDocument(Document doc) {
@@ -43,5 +44,11 @@ public class DocService {
 	}
 	public int updateSignStatus(int docNo, String signStatus) {
 		return docMapper.updateSignStatus(docNo, signStatus);
+	}
+	public List<Document> selectDocumentList(Page page) {
+		return docMapper.selectDocumentList(page);
+	}
+	public int totalCount(Page page) {
+		return docMapper.totalCount(page);
 	}
 }

@@ -7,20 +7,21 @@
 	<!--
         [1] 사원: 본인이 작성한 문서만 조회
     -->
-    <select id="selectMyDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
+    <select id="selectMyDocuments" parameterType="com.example.signapp.dto.Page" resultType="com.example.signapp.dto.Document">
 	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
 		FROM document INNER JOIN emp
 		ON document.emp_id = emp.emp_id
 		WHERE emp.emp_id = (
 		  SELECT emp_id FROM emp WHERE emp_id = #{empId}
 		)
+		
 		ORDER BY createdate DESC
 	</select>
-    
+   
     <!--
         [2] 팀장: 같은 부서(emp.dept) 사람들의 문서 조회
     -->
-    <select id="selectTeamDocuments" parameterType="string" resultType="com.example.signapp.dto.Document">
+    <select id="selectTeamDocuments" parameterType="com.example.signapp.dto.Page" resultType="com.example.signapp.dto.Document">
 	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
 		FROM document INNER JOIN emp
 		ON document.emp_id = emp.emp_id
@@ -31,7 +32,16 @@
 	            SELECT dept FROM emp WHERE emp_id = #{empId}
 	        )
 	    )
+	    
+	    <if test="searchType == 'title' and searchWord != null and searchWord != ''">
+			AND doc_title LIKE CONCAT('%', #{searchWord}, '%')
+		</if>
+		<if test="searchType == 'name' and searchName != null and searchName != ''">
+			AND emp.emp_name LIKE CONCAT('%', #{searchName}, '%')
+		</if>
+
 	    ORDER BY createdate DESC
+	    LIMIT #{beginRow}, #{rowPerPage}
 	</select>
 	
 	<!--
@@ -50,6 +60,31 @@
 		ON document.emp_id = emp.emp_id
 	    WHERE doc_no = #{docNo}
 	</select>
+	
+	<select id="totalCount" parameterType="com.example.signapp.dto.Page" resultType="int">
+		SELECT COUNT(*) 
+		FROM document 
+		INNER JOIN emp ON document.emp_id = emp.emp_id
+		<where>
+		    <if test="searchWord != null and searchWord != ''">
+				<choose>
+					<when test="searchType == 'title'">
+						AND doc_title LIKE CONCAT('%', #{searchWord}, '%')
+					</when>
+					<when test="searchType == 'name'">
+						AND emp.emp_name LIKE CONCAT('%', #{searchName}, '%')
+					</when>
+					<otherwise>
+						AND (
+							doc_title LIKE CONCAT('%', #{searchWord}, '%') 
+								OR emp.emp_name LIKE CONCAT('%', #{searchWord}, '%')
+						)
+					</otherwise>
+				</choose>
+			</if>
+		</where>
+	</select>
+
 
 	<!-- //////// UPDATE //////// -->
 	<update id="updateDocument" parameterType="com.example.signapp.dto.Document">

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.signapp.dto.Document;
 import com.example.signapp.dto.Emp;
+import com.example.signapp.dto.Page;
 import com.example.signapp.dto.Sign;
 import com.example.signapp.service.DocService;
 import com.example.signapp.service.SignService;
@@ -26,28 +27,42 @@ public class DocController {
 	
     // 리스트
     @GetMapping("/docList")
-    public String docList(HttpSession session, Model model) {
+    public String docList(HttpSession session, Model model
+			    		,@RequestParam(defaultValue = "1") int page
+						,@RequestParam(defaultValue = "10") int size
+						,@RequestParam(defaultValue = "") String searchWord
+						,@RequestParam(defaultValue = "title") String searchType) {
+    	System.out.println("검색어" + searchWord);
+    	System.out.println("검색타입" + searchType);
     	// 로그인 사용자 정보 세션에서 꺼내고
         Emp loginEmp = (Emp) session.getAttribute("loginEmployee");
        
         // 로그인한 사용자의 레벨과 아이디 
         int empLevel = loginEmp.getEmpLevel();
         String empId = loginEmp.getEmpId();
+        Page paging = new Page(size, page, 0, searchWord, searchType, empId);
+        log.info("searchEmpId: {}", paging.getSearchName());
+        log.info("page info = {}", paging);
+	    int totalCount = docService.totalCount(paging);
+	    log.info(""+totalCount);
+		paging.setTotalCount(totalCount);
+
 
         List<Document> docList = null;
         // 사원 : 내가 작성한 문서만
         if (empLevel == 1) {
-            docList = docService.getMyDocuments(empId);
+            docList = docService.getMyDocuments(paging);
         // 팀장 : 같은부서 와 사원들 문서
         } else if (empLevel == 2) {
-            docList = docService.getTeamDocuments(empId);
+            docList = docService.getTeamDocuments(paging);
         // 관리자 : 전부 다 조회    
         } else if (empLevel == 3) {
-            docList = docService.getAllDocuments();
+            docList = docService.getAllDocuments(paging);
         }
 
         //log.info(docList.toString());
         model.addAttribute("docList", docList);
+        model.addAttribute("page", paging);
         return "docList";
     }
     
