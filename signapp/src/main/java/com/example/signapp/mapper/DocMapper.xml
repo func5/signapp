@@ -14,6 +14,12 @@
 		WHERE emp.emp_id = (
 		  SELECT emp_id FROM emp WHERE emp_id = #{empId}
 		)
+		<if test="searchType == 'title' and searchWord != null and searchWord != ''">
+			AND doc_title LIKE CONCAT('%', #{searchWord}, '%')
+		</if>
+		<if test="searchType == 'name' and searchName != null and searchName != ''">
+			AND emp.emp_name LIKE CONCAT('%', #{searchName}, '%')
+		</if>
 		
 		ORDER BY createdate DESC
 	</select>
@@ -47,10 +53,17 @@
 	<!--
         [3] 관리자: 전체 문서 다 조회
     -->
-    <select id="selectAllDocuments" resultType="com.example.signapp.dto.Document">
+    <select id="selectAllDocuments" parameterType="com.example.signapp.dto.Page" resultType="com.example.signapp.dto.Document">
 	    SELECT doc_no docNo, doc_title docTitle, emp_name empName, doc_content docContent, status, createdate
 		FROM document INNER JOIN emp
 		ON document.emp_id = emp.emp_id
+		<if test="searchType == 'title' and searchWord != null and searchWord != ''">
+			AND doc_title LIKE CONCAT('%', #{searchWord}, '%')
+		</if>
+		<if test="searchType == 'name' and searchName != null and searchName != ''">
+			AND emp.emp_name LIKE CONCAT('%', #{searchName}, '%')
+		</if>
+		
 	    ORDER BY createdate DESC
 	</select>
 	
