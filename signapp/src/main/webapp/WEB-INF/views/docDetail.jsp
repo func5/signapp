@@ -122,8 +122,8 @@
 
 .sign-box canvas {
     border: 1px solid #333;
-    width: 180px;
-    height: 80px;
+    width: 240px;
+    height: 100px;
     margin-bottom: 12px;
     border-radius: 6px;
 }
@@ -335,7 +335,7 @@
             </c:if>
             <c:if test="${empty signLv2 and myLevel == 2 and doc.status ne 'REJECTED'}">
                 <form action="/signDoc" method="post">
-                    <canvas style="border: 1px solid #000000; width:180px; height:60px;"></canvas><br>
+                    <canvas style="border: 1px solid #000000; width:240px; height:100px;"></canvas><br>
                     <button type="button" id="btnClear">사인 지우기</button>
                     <input type="hidden" name="docNo" value="${doc.docNo}" />
                     <input type="hidden" id="empId" name="empId" value="${myEmpId}" />
@@ -359,7 +359,7 @@
             </c:if>
             <c:if test="${empty signLv3 and signLv2 != null and myLevel == 3 and doc.status ne 'REJECTED'}">
                 <form action="/signDoc" method="post">
-                    <canvas style="border: 1px solid #000000; width:180px; height:60px;"></canvas><br>
+                    <canvas style="border: 1px solid #000000; width:240px; height:100px;"></canvas><br>
                     <button type="button" id="btnClear">사인 지우기</button>
                     <input type="hidden" name="docNo" value="${doc.docNo}" />
                     <input type="hidden" id="empId" name="empId" value="${myEmpId}" />
