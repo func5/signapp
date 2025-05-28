@@ -270,9 +270,13 @@
 	  <ul class="nav-list">
 	    <li><a href="/docList"><span>🏠</span> HOME</a></li>
 	    <li><a href="#"><span>👤</span> 내 인사정보</a></li>
-	    <li><a href="/insertDoc"><span>💰</span> 문서작성</a></li> 
+	    <c:choose>
+		    <c:when test="${loginEmployee.empLevel == 1}">
+		    	<li><a href="/insertDoc"><span>💰</span> 문서작성</a></li>
+		    </c:when>
+	    </c:choose>
 	    <li><a href="#" id="openSearchModal"><span>📋</span> 검색</a></li>
-	    <li><a href="/logout"><span>📝</span> 로그아웃</a></li> 
+	    <li><a href="/logout"><span>📝</span> 로그아웃</a></li>
 	  </ul>
 	</div>
     <!-- 본문 콘텐츠 시작 -->

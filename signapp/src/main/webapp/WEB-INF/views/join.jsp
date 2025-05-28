@@ -92,6 +92,7 @@
 		        <option value="영업팀">영업팀</option>
 		        <option value="개발팀">개발팀</option>
 		        <option value="경원지원팀">경영지원</option>
+		        <option value="경영전략">경영전략</option>
 		    </select>
 		</div>
 		
